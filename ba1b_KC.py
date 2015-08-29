@@ -5,7 +5,7 @@ def mfkmer(dna, k):
 
     # create a dict containing all k-mers in dna and their respective frequencies:
     kmerfreq = dict()
-    for i in range(len(dna) - k):
+    for i in range(len(dna) - k + 1):
         kmerfreq[dna[i:i+k]] = kmerfreq.get(dna[i:i+k], 0) + 1
 	
     # get the values of kmerfreq and find the maximum, i.e. frequency of the mf k-mer:
