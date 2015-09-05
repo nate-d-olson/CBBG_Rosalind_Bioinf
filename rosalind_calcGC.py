@@ -11,7 +11,7 @@ __maintainer__ = "Nate Olson"
 __email__ = "nathandavidolson@gmail.com"
 
 import sys
-from rosalind_utils import readdat
+from rosalind_utils import parse_fasta
 from rosalind_NucCount import count_nuc
 
 
@@ -37,9 +37,34 @@ def calc_gc(seq):
     return (nuc_count['G'] + nuc_count['C']) / float(len(seq))
 
 
+def find_max_gc(seq_dict):
+    """ Finds sequence with highest GC content
+
+    Given a dict of DNA sequence as input calculate the percent
+    of G's and C's relative to the total number of nucleotides for
+    each and returns the name and GC content for the sequence with
+    the highest GC content
+
+    Args:
+        seq_dict: a dict with sequences, names as keys and seqs as values
+
+    Returns:
+        list with name and GC content
+    """
+    max_name = ""
+    max_value = 0.0
+    for name, seq in seq_dict.iteritems():
+        gc = calc_gc(seq)
+        if gc > max_value:
+            max_name, max_value = name, gc
+
+    return [max_name, max_value * 100]
+
+
 def main(filename):
-    dat = readdat(filename)
-    print calc_gc(dat[0])
+    dat = parse_fasta(filename)
+    for i in find_max_gc(dat):
+        print i
 
 if __name__ == '__main__':
     filename = sys.argv[1]

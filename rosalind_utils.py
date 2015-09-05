@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 def readdat(filename):
     """ Reading input file
 
@@ -24,5 +27,29 @@ def readdat(filename):
     return dat
 
 
-def parse_fasta(dat):
-    pass
+def parse_fasta(filename):
+    """ parsing fasta file
+
+    reads a fasta input file and returns a dict with
+    with seq name as key and seq as value
+
+    Args:
+        filename: name of file with input data
+
+    Returns:
+        dict with seq name as key and seq as value
+
+    Raises:
+        IOError: An error occurred accessing the file.
+    """
+
+    dat = readdat(filename)
+
+    seq_dict = defaultdict(str)
+    for line in dat:
+        if line.startswith('>'):
+            name = line[1:]
+        else:
+            seq_dict[name] += line
+
+    return seq_dict
