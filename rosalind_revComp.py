@@ -11,9 +11,10 @@ __maintainer__ = "Nate Olson"
 __email__ = "nathandavidolson@gmail.com"
 
 import sys
+from rosalind_utils import readdat
 
 
-def rev_comp(seq):
+def rev_comp(seq, return_rna=False, reverse=True):
     """ Sequence reverse complement seqeunce
 
     Given a DNA sequence as input return the reverse complement
@@ -23,7 +24,8 @@ def rev_comp(seq):
         Result CCCTCGCAAA
     Args:
         seq: nucleotide sequence as a text string
-
+        return_rna: boolean returns U in place of T if true, default false
+        return_comp: boolean if true does not reverse seq, default true
     Returns:
         string
 
@@ -36,40 +38,23 @@ def rev_comp(seq):
 
     comp_lookup = {"A": "T", "T": "A",
                    "G": "C", "C": "G"}
-    rev_comp = "".join([comp_lookup[x] for x in seq[::-1]])
+
+    if return_rna:
+        comp_lookup = {"A": "U", "T": "A", "U": "A",
+                       "G": "C", "C": "G"}
+    if reverse:
+        rev_comp = "".join([comp_lookup[x] for x in seq[::-1]])
+    else:
+
+        rev_comp = "".join([comp_lookup[x] for x in seq])
 
     return(rev_comp)
-
-
-def readdat(filename):
-    """ Reading input file
-
-    Reads lines in file and returns a list
-
-    Args:
-        filename: name of file with input data
-
-    Returns:
-        List of lines in the input file as strings
-
-    Raises:
-        IOError: An error occurred accessing the file.
-    """
-
-    try:
-        open(filename, 'r')
-    except:
-        # TODO add error message
-        raise
-
-    with open(filename, 'r') as f:
-        dat = map(str.strip, f.readlines())
-    return dat
 
 
 def main(filename):
     dat = readdat(filename)
     print rev_comp(dat[0])
+
 
 if __name__ == '__main__':
     filename = sys.argv[1]
