@@ -24,14 +24,23 @@ from collections import defaultdict
 from rosalind_utils import readdat
 
 def ltclumps(genome, k, l, t):
-
+    
+    # parameters k,l,t need to be converted to int if read from files,
+    # I choose to get this done here:
+    try:
+        k = int(k)
+        l = int(l)
+        t = int(t)
+    except:
+        raise TypeError('invalid type of arguments for function ltclumps.')
+        
     # create a defaultdict to store all positions each k-mer appears,
     # kmer_pos's keys are the distinct k-mers in genome,
     # kmer_pos's values are lists of where the corresponding k-mer appears;
     # and create a list to keep all distinct k-mers that are (L,t)-clumps in genome:
     kmer_pos = defaultdict(list)
     hits = []
-    for i in range(len(genome) - k + 1):
+    for i in xrange(len(genome) - k + 1):
         kmer_pos[genome[i:i+k]].append(i)
     
     # loop through all the distinct k-mers in genome:
@@ -50,7 +59,7 @@ def ltclumps(genome, k, l, t):
         # which is kmer_pos[kmer][i + t -1] - kmer_pos[kmer][i] + k.
         # as long as we find one of the distances <= l, then the k-mer is a hit,
         # we append it to the list of hits, and break the loop
-        for i in range(len(kmer_pos[kmer]) - t + 1):
+        for i in xrange(len(kmer_pos[kmer]) - t + 1):
             if kmer_pos[kmer][i + t -1] - kmer_pos[kmer][i] + k <= l:
                 hits.append(kmer)
                 break
@@ -66,11 +75,19 @@ def ltclumps2(genome, k, l, t):
     could be a hit (at the current time point).
     once a k-mer is identified as a hit, we don't record its positions of further occurrences.
     """
-    
+    # parameters k,l,t need to be converted to int if read from files,
+    # I choose to get this done here:
+    try:
+        k = int(k)
+        l = int(l)
+        t = int(t)
+    except:
+        raise TypeError('invalid type of arguments for function ltclumps2.')
+        
     kmer_pos = defaultdict(list)
     hits = []
     
-    for i in range(len(genome) - k + 1):
+    for i in xrange(len(genome) - k + 1):
     
         kmer = genome[i:i+k]
         
@@ -88,19 +105,15 @@ def ltclumps2(genome, k, l, t):
 
 def main(filename):
     dat = readdat(filename)
-    genome = dat[0]
-    k = int(dat[1])
-    l = int(dat[2])
-    t = int(dat[3])
     print 'Approach 1:'
     startt = time.clock()
-    print ltclumps(genome, k, l, t)
+    print ltclumps(*dat)
     endt = time.clock()
     print 'Wall time /sec:', endt - startt
     # this don't work: timeit.repeat('ltclumps(genome, k, l, t)', setup='from __main__ import ltclumps', repeat=3, number=100)
     print 'Approach 2:'
     startt = time.clock()
-    print ltclumps2(genome, k, l, t)
+    print ltclumps2(*dat)
     endt = time.clock()
     print 'Wall time /sec:', endt - startt
     # this don't work: timeit.repeat('ltclumps2(genome, k, l, t)', setup='from __main__ import ltclumps2', repeat=3, number=100)
