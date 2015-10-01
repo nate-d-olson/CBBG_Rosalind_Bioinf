@@ -23,7 +23,7 @@ def readdat(filename):
         raise
 
     with open(filename, 'r') as f:
-        dat = map(str.strip, f.readlines())
+        dat = [line.strip() for line in f]
     return dat
 
 
