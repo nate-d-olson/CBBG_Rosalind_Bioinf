@@ -24,17 +24,27 @@ def pattern_freq(text, pattern):
     pat_l = len(pattern)
     freq = 0
     
-    for i in range(txt_l - pat_l + 1):
+    for i in xrange(txt_l - pat_l + 1):
         if text[i:i + pat_l] == pattern:
             freq += 1
             
     return freq
 
+# Another approach with the str.find method    
+def pattern_freq_v2(text, pattern):
+
+    freq = 0
+    startpoint = 0
+    while True:
+        startpoint = text.find(pattern, startpoint) + 1
+        if startpoint > 0:
+            freq += 1
+        else:
+            return freq
+
 def main(filename):
     dat = readdat(filename)
-    text = dat[0]
-    pattern = dat[1]
-    print pattern_freq(text, pattern)
+    print pattern_freq(*dat)
     
 if __name__ == '__main__':
     filename = sys.argv[1]
