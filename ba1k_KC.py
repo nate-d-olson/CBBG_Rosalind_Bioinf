@@ -35,13 +35,32 @@ def permutdna(n):
 def freq_array(dna, k):
     k = int(k)
     return (pattern_freq_v2(dna, pattern) for pattern in permutdna(k))
+
+
+# Approach 2 (directly copied from sb. else's code):
+def patternToNumber(pattern):
+    letter_value = {'A':0, 'C':1, 'G':2, 'T':3}    
+    total = 0
+    for i in range(len(pattern)):
+        ## grab the letters from the rear ([-(i+1)]) for increasing i's 
+        ## and multiply it's value by the position it's in
+        total += letter_value[pattern[-(i+1)]] * len(letter_value)**(i)
+    return total
+
+def computingFrequencies(text, k):
+    array = [0]*((4**k))
+    for i in range(len(text) - k + 1):
+        kmer = text[i:i+k]
+        j = patternToNumber(kmer)
+        array[j] += 1
+    return ' '.join(str(x) for x in array)
+
     
 def main(filename):
     dat = readdat(filename)
     with open('ba1k_out.txt', 'w') as fout:
-        result_list = [str(item) for item in freq_array(*dat)]
-        fout.write(' '.join(result_list))
-
+        for item in freq_array(*dat):
+            fout.write(str(item) + ' ')
     
     
 if __name__ == '__main__':
