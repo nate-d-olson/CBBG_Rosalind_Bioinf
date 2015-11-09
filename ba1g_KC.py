@@ -38,7 +38,7 @@ def hamming_dist(p, q):
 def main(filename):
     dat = readdat(filename)
     print hamming_dist(*dat)
-    
+    # I manually edited the input file so that each parameter comes in a separate line
     
 if __name__ == '__main__':
     filename = sys.argv[1]
